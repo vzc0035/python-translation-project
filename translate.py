@@ -169,9 +169,39 @@ def get_longest_peptide(rna_sequence, genetic_code):
         A string of the longest sequence of amino acids encoded by
         `rna_sequence`.
     """
-    pass
-
-
+#    pass
+    rna_sequence=rna_sequence.upper()
+    complement = {'A': 'U', 'U': 'A', 'C': 'G', 'G': 'C'}
+    rna_rev_comp = "".join(complement[nucleotide] for nucleotide in sequence [::-1])
+    proteins =""
+    start_pos=rna_sequence.find('AUG')
+    start_rev_pos=rna_rev_comp.find('AUG')
+    for i in range(start_pos, rna_sequence, genetic_code):
+        codon = rna_sequence[i:i + 3]
+        if codon in ['UAG', 'UGA', 'UAA'] or len(codon) != 3:
+            break
+        else: proteins += genetic_code[codon]
+    return proteins
+    while start_pos < len(rna_sequence):
+        start_codon = rna_sequence[start_pos:start_pos + 3]
+        if start_codon == 'AUG':
+            translation = translate(start_pos, rna_sequence, genetic_code)
+            aa_list.append(translation)
+        start_pos += 1
+    return aa_list
+    for i in range(start_pos, len(rna_rev_comp), 3:
+        codon = rna_rev_comp[i:i + 3]
+        if codon in ['UAG', 'UAA', 'UGA'] or len(codon) != 3:
+            break
+        else: proteins += genetic_code[codon]
+    return proteins
+    while start_rev_pos < len(rna_rev_comp):
+        start_codon = rna_rev_comp[start_rev_pos:start_rev_pos + 3]
+        if start_codon == 'AUG':
+            translation = translate(start_rev_pos, rna_rev_comp, genetic_code)
+            aa_list.append(translation)
+        start_rev_pos += 1
+    return aa_list
 if __name__ == '__main__':
     genetic_code = {'GUC': 'V', 'ACC': 'T', 'GUA': 'V', 'GUG': 'V', 'ACU': 'T', 'AAC': 'N', 'CCU': 'P', 'UGG': 'W', 'AGC': 'S', 'AUC': 'I', 'CAU': 'H', 'AAU': 'N', 'AGU': 'S', 'GUU': 'V', 'CAC': 'H', 'ACG': 'T', 'CCG': 'P', 'CCA': 'P', 'ACA': 'T', 'CCC': 'P', 'UGU': 'C', 'GGU': 'G', 'UCU': 'S', 'GCG': 'A', 'UGC': 'C', 'CAG': 'Q', 'GAU': 'D', 'UAU': 'Y', 'CGG': 'R', 'UCG': 'S', 'AGG': 'R', 'GGG': 'G', 'UCC': 'S', 'UCA': 'S', 'UAA': '*', 'GGA': 'G', 'UAC': 'Y', 'GAC': 'D', 'UAG': '*', 'AUA': 'I', 'GCA': 'A', 'CUU': 'L', 'GGC': 'G', 'AUG': 'M', 'CUG': 'L', 'GAG': 'E', 'CUC': 'L', 'AGA': 'R', 'CUA': 'L', 'GCC': 'A', 'AAA': 'K', 'AAG': 'K', 'CAA': 'Q', 'UUU': 'F', 'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'GCU': 'A', 'GAA': 'E', 'AUU': 'I', 'UUG': 'L', 'UUA': 'L', 'UGA': '*', 'UUC': 'F'}
     rna_seq = ("AUG"
