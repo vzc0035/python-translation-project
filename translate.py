@@ -31,12 +31,12 @@ def translate_sequence(rna_sequence, genetic_code):
 #    pass
     rna_sequence=rna_sequence.upper()
     protein =""
-    if len(rna_sequence)%3 == 0 and not '*':
-        for i in range(0, len(rna_sequence), 3):
-            codon = rna_sequence[i:i + 3]
-            protein+= genetic_code[codon]
-    elif len(rna_sequence)%3 == 0:
-        for i in range(0, len(rna_sequence), 3):
+    for i in range(0, len(rna_sequence), 3):
+        codon = rna_sequence[i: i+3]
+        amino_acid = genetic_code.get(codon, '*')
+        if amino_acid != '*':
+            protein += amino_acid
+        else:
             break
     return protein
 def get_all_translations(rna_sequence, genetic_code):
@@ -70,8 +70,24 @@ def get_all_translations(rna_sequence, genetic_code):
         A list of strings; each string is an sequence of amino acids encoded by
         `rna_sequence`.
     """
-    pass
-
+#    pass
+    rna_sequence=rna_sequence.upper()
+    start_pos = rna_sequence.find('AUG')
+    protein =""
+    i = start_pos
+    for i in range(start_pos, len(rna_sequence), 3):
+        codon = rna_sequence[i:i + 3]
+        if codon in ['UAG', 'UAA', 'UGA'] or len(codon) != 3:
+            break
+        else: protein += genetic_code[codon]
+    return protein
+    while i < len(rna_sequence):
+        start_codon = rna_sequence[start_pos:start_pos + 3]
+        if start_codon == 'AUG':
+            translation = translate(start_pos, rna_sequence, genetic_code)
+            aa_list.append(translation)
+        start_pos += 1
+    return aa_list
 def get_reverse(sequence):
     """Reverse orientation of `sequence`.
 
