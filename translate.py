@@ -71,22 +71,20 @@ def get_all_translations(rna_sequence, genetic_code):
         `rna_sequence`.
     """
 #    pass
-    rna_sequence=rna_sequence.upper()
-    start_pos = rna_sequence.find('AUG')
-    proteins =""
-    i = start_pos
-    for i in range(start_pos, len(rna_sequence), 3):
-        codon = rna_sequence[i:i + 3]
-        if codon in ['UAG', 'UAA', 'UGA'] or len(codon) != 3:
-            break
-        else: proteins += genetic_code[codon]
-    return proteins
-    while i < len(rna_sequence):
-        start_codon = rna_sequence[start_pos:start_pos + 3]
-        if start_codon == 'AUG':
-            translation = translate(start_pos, rna_sequence, genetic_code)
-            aa_list.append(translation)
-        start_pos += 1
+    rna_sequence = rna_sequence.upper()
+    number_of_bases = len(rna_sequence)
+    last_codon_index = number_of_bases - 3
+    if last_codon_index < 0:
+        return[]
+    aa_list = []
+    for i in range(last_codon_index + 1):
+        codon = rna_sequence[i: i + 3]
+        if codon == "AUG":
+            aa_seq = translate_sequence(
+                rna_sequence = rna_sequence[i:],
+                genetic_code = genetic_code)
+            if aa_seq:
+                aa_list.append(aa_seq)
     return aa_list
 def get_reverse(sequence):
     """Reverse orientation of `sequence`.
@@ -170,38 +168,39 @@ def get_longest_peptide(rna_sequence, genetic_code):
         `rna_sequence`.
     """
 #    pass
-    rna_sequence=rna_sequence.upper()
-    complement = {'A': 'U', 'U': 'A', 'C': 'G', 'G': 'C'}
-    rna_rev_comp = "".join(complement[nucleotide] for nucleotide in sequence [::-1])
-    proteins =""
-    start_pos=rna_sequence.find('AUG')
-    start_rev_pos=rna_rev_comp.find('AUG')
-    for i in range(start_pos, rna_sequence, genetic_code):
-        codon = rna_sequence[i:i + 3]
-        if codon in ['UAG', 'UGA', 'UAA'] or len(codon) != 3:
-            break
-        else: proteins += genetic_code[codon]
-    return proteins
-    while start_pos < len(rna_sequence):
-        start_codon = rna_sequence[start_pos:start_pos + 3]
-        if start_codon == 'AUG':
-            translation = translate(start_pos, rna_sequence, genetic_code)
-            aa_list.append(translation)
-        start_pos += 1
-    return aa_list
-    for i in range(start_pos, len(rna_rev_comp), 3:
-        codon = rna_rev_comp[i:i + 3]
-        if codon in ['UAG', 'UAA', 'UGA'] or len(codon) != 3:
-            break
-        else: proteins += genetic_code[codon]
-    return proteins
-    while start_rev_pos < len(rna_rev_comp):
-        start_codon = rna_rev_comp[start_rev_pos:start_rev_pos + 3]
-        if start_codon == 'AUG':
-            translation = translate(start_rev_pos, rna_rev_comp, genetic_code)
-            aa_list.append(translation)
-        start_rev_pos += 1
-    return aa_list
+#    rna_sequence=rna_sequence.upper()
+#    complement = {'A': 'U', 'U': 'A', 'C': 'G', 'G': 'C'}
+#    rna_rev_comp = "".join(complement[nucleotide] for nucleotide in sequence [::-1])
+#    proteins =""
+#    start_pos=rna_sequence.find('AUG')
+#    start_rev_pos=rna_rev_comp.find('AUG')
+#    for i in range(start_pos, rna_sequence, genetic_code):
+#        codon = rna_sequence[i:i + 3]
+#        if codon in ['UAG', 'UGA', 'UAA'] or len(codon) != 3:
+#            break
+#        else: proteins += genetic_code[codon]
+#    return proteins
+#    while start_pos < len(rna_sequence):
+#        start_codon = rna_sequence[start_pos:start_pos + 3]
+#        if start_codon == 'AUG':
+#            translation = translate(start_pos, rna_sequence, genetic_code)
+#            aa_list.append(translation)
+#        start_pos += 1
+#    return aa_list
+#    for i in range(start_pos, len(rna_rev_comp), 3:
+#        codon = rna_rev_comp[i:i + 3]
+#        if codon in ['UAG', 'UAA', 'UGA'] or len(codon) != 3:
+#            break
+#        else: proteins += genetic_code[codon]
+#    return proteins
+#    while start_rev_pos < len(rna_rev_comp):
+#        start_codon = rna_rev_comp[start_rev_pos:start_rev_pos + 3]
+#        if start_codon == 'AUG':
+#            translation = translate(start_rev_pos, rna_rev_comp, genetic_code)
+#            aa_list.append(translation)
+#       start_rev_pos += 1
+#    return aa_list
+
 if __name__ == '__main__':
     genetic_code = {'GUC': 'V', 'ACC': 'T', 'GUA': 'V', 'GUG': 'V', 'ACU': 'T', 'AAC': 'N', 'CCU': 'P', 'UGG': 'W', 'AGC': 'S', 'AUC': 'I', 'CAU': 'H', 'AAU': 'N', 'AGU': 'S', 'GUU': 'V', 'CAC': 'H', 'ACG': 'T', 'CCG': 'P', 'CCA': 'P', 'ACA': 'T', 'CCC': 'P', 'UGU': 'C', 'GGU': 'G', 'UCU': 'S', 'GCG': 'A', 'UGC': 'C', 'CAG': 'Q', 'GAU': 'D', 'UAU': 'Y', 'CGG': 'R', 'UCG': 'S', 'AGG': 'R', 'GGG': 'G', 'UCC': 'S', 'UCA': 'S', 'UAA': '*', 'GGA': 'G', 'UAC': 'Y', 'GAC': 'D', 'UAG': '*', 'AUA': 'I', 'GCA': 'A', 'CUU': 'L', 'GGC': 'G', 'AUG': 'M', 'CUG': 'L', 'GAG': 'E', 'CUC': 'L', 'AGA': 'R', 'CUA': 'L', 'GCC': 'A', 'AAA': 'K', 'AAG': 'K', 'CAA': 'Q', 'UUU': 'F', 'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'GCU': 'A', 'GAA': 'E', 'AUU': 'I', 'UUG': 'L', 'UUA': 'L', 'UGA': '*', 'UUC': 'F'}
     rna_seq = ("AUG"
